@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input class="message" type="text" />
+    <button onclick="sendMessage()">Send</button>
+    <script>
+        function sendMessage(){
+            const field = document.querySelector(".message");
+            const msg = field.value;
+            socket.send(msg);
+            field.value = '';
+        }
+        const socket = new WebSocket("ws://localhost:8080/ws");
+        console.log("Attempting Websocket Connection");
+        socket.onopen = () => {
+            console.log("Successfully connected")
+            socket.send("Hi from the Client");
+        }
+        socket.onclose = () => {
+            console.log("Socket closed connection.")
+        }
+        socket.onmessage = msg => {
+            console.log(msg);
+        }
+        socket.onerror = err => {
+            console.log(`Socket Error: ${err}`);
+        }
+    </script>
+</body>
+</html>
